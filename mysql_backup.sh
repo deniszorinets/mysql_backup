@@ -29,13 +29,9 @@ for database in $DATABASES
       fi
       
       backup_name="$CURRENT_DATE""_backup.$database.sql"
-      tarball_name="$backup_name.tar.gz"
-      `/usr/bin/mysqldump -h "$HOST" --databases "$database" -u "$USER" --password="$PASSWORD"  --single-transaction > "$backup_name"`
+      tarball_name="$backup_name.gz"
+      `/usr/bin/mysqldump -h "$HOST" --databases "$database" -u "$USER" --password="$PASSWORD"  --single-transaction | gzip -9 > "$backup_name".gz`
       echo "BACKUPING $backup_name"
-      `/bin/tar -zcf "$tarball_name" "$backup_name"`
-      echo "COMPRESSING $tarball_name"
-      `/bin/rm "$backup_name"`
-      echo "CLEANUP $backup_name"
       fi
   done 
 
